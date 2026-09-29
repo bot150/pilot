@@ -1,0 +1,31 @@
+{
+  "scenario_id": "SCENARIO-01",
+  "experience_level": 1,
+  "title": "First Payment Latency Incident",
+  "description": "The agent encounters a payment API latency incident with very limited prior experience.",
+  "incident": {
+    "service": "payments-api",
+    "symptoms": [
+      "Payment requests are timing out",
+      "API latency has increased significantly"
+    ],
+    "metrics": {
+      "p95_latency_ms": 2800,
+      "error_rate_percent": 8.4,
+      "requests_per_minute": 8900,
+      "db_connection_usage_percent": 98
+    }
+  },
+  "expected_behavior": {
+    "memory_context": "Very limited historical experience",
+    "response_style": "Broad troubleshooting guidance",
+    "suggested_checks": [
+      "Check database latency",
+      "Check database connection usage",
+      "Check recent traffic changes",
+      "Check recent deployments",
+      "Check downstream dependencies"
+    ]
+  },
+  "learning_goal": "Establish the baseline behavior before the agent has accumulated meaningful incident experience."
+}

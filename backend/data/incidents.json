@@ -1,0 +1,617 @@
+[
+  {
+    "incident_id": "INC-1042",
+    "timestamp": "2026-08-12T14:32:00Z",
+    "service": "payments-api",
+    "severity": "SEV-2",
+    "symptoms": [
+      "Payment requests timing out",
+      "High API latency"
+    ],
+    "metrics": {
+      "p95_latency_ms": 2800,
+      "error_rate_percent": 8.4,
+      "requests_per_minute": 8900,
+      "db_connection_usage_percent": 98
+    },
+    "logs": [
+      "Database connection timeout",
+      "PostgreSQL connection pool exhausted",
+      "Unable to acquire database connection"
+    ],
+    "root_cause": "PostgreSQL connection pool exhaustion during a traffic spike",
+    "resolution": [
+      "Increased database connection pool from 50 to 100",
+      "Restarted affected application instances"
+    ],
+    "outcome": {
+      "recovery_time_minutes": 18,
+      "resolved": true
+    }
+  },
+  {
+    "incident_id": "INC-1045",
+    "timestamp": "2026-08-15T09:18:00Z",
+    "service": "notification-service",
+    "severity": "SEV-2",
+    "symptoms": [
+      "Notification delivery delays",
+      "Large message backlog"
+    ],
+    "metrics": {
+      "p95_latency_ms": 1900,
+      "error_rate_percent": 5.2,
+      "queue_depth": 18400
+    },
+    "logs": [
+      "Connection refused by email provider",
+      "Downstream notification provider unavailable",
+      "Retry queue increasing"
+    ],
+    "root_cause": "External notification provider experiencing an outage",
+    "resolution": [
+      "Enabled secondary notification provider",
+      "Reduced retry interval after provider recovery"
+    ],
+    "outcome": {
+      "recovery_time_minutes": 27,
+      "resolved": true
+    }
+  },
+  {
+    "incident_id": "INC-1048",
+    "timestamp": "2026-08-18T16:42:00Z",
+    "service": "inventory-service",
+    "severity": "SEV-2",
+    "symptoms": [
+      "Inventory API requests failing",
+      "Product availability checks becoming slow"
+    ],
+    "metrics": {
+      "p95_latency_ms": 2100,
+      "error_rate_percent": 7.1,
+      "redis_connection_usage_percent": 96
+    },
+    "logs": [
+      "Redis connection limit reached",
+      "Unable to acquire Redis connection",
+      "Cache request timeout"
+    ],
+    "root_cause": "Redis connection saturation caused by increased concurrent inventory requests",
+    "resolution": [
+      "Increased Redis connection limit",
+      "Restarted inventory-service instances"
+    ],
+    "outcome": {
+      "recovery_time_minutes": 21,
+      "resolved": true
+    }
+  },
+  {
+    "incident_id": "INC-1051",
+    "timestamp": "2026-08-21T11:07:00Z",
+    "service": "orders-api",
+    "severity": "SEV-1",
+    "symptoms": [
+      "Order creation returning HTTP 500",
+      "Latency increased immediately after deployment"
+    ],
+    "metrics": {
+      "p95_latency_ms": 3200,
+      "error_rate_percent": 12.6,
+      "requests_per_minute": 6100
+    },
+    "logs": [
+      "Configuration value PAYMENT_TIMEOUT missing",
+      "Application failed to initialize payment client",
+      "HTTP 500 on order creation"
+    ],
+    "root_cause": "Production configuration variable was missing in a new deployment",
+    "resolution": [
+      "Restored missing environment variable",
+      "Rolled back deployment"
+    ],
+    "outcome": {
+      "recovery_time_minutes": 14,
+      "resolved": true
+    }
+  },
+  {
+    "incident_id": "INC-1057",
+    "timestamp": "2026-08-25T19:24:00Z",
+    "service": "payments-api",
+    "severity": "SEV-2",
+    "symptoms": [
+      "Payment timeout rate increased",
+      "API response times increased during peak traffic"
+    ],
+    "metrics": {
+      "p95_latency_ms": 3100,
+      "error_rate_percent": 9.7,
+      "requests_per_minute": 9700,
+      "db_connection_usage_percent": 99
+    },
+    "logs": [
+      "PostgreSQL connection acquisition timeout",
+      "Connection pool at maximum capacity",
+      "Payment request waiting for database connection"
+    ],
+    "root_cause": "PostgreSQL connection pool exhausted during peak traffic",
+    "resolution": [
+      "Increased database connection pool",
+      "Scaled payments-api instances"
+    ],
+    "outcome": {
+      "recovery_time_minutes": 22,
+      "resolved": true
+    }
+  },
+  {
+    "incident_id": "INC-1059",
+    "timestamp": "2026-08-27T07:51:00Z",
+    "service": "notification-service",
+    "severity": "SEV-2",
+    "symptoms": [
+      "Push notifications delayed",
+      "Notification queue growing rapidly"
+    ],
+    "metrics": {
+      "p95_latency_ms": 2400,
+      "error_rate_percent": 6.3,
+      "queue_depth": 22100
+    },
+    "logs": [
+      "Downstream push provider returned HTTP 503",
+      "Provider connection timeout",
+      "Retry attempts increasing"
+    ],
+    "root_cause": "Downstream push notification provider unavailable",
+    "resolution": [
+      "Routed traffic to backup provider",
+      "Processed queued notifications after recovery"
+    ],
+    "outcome": {
+      "recovery_time_minutes": 31,
+      "resolved": true
+    }
+  },
+  {
+    "incident_id": "INC-1062",
+    "timestamp": "2026-08-30T13:16:00Z",
+    "service": "orders-api",
+    "severity": "SEV-2",
+    "symptoms": [
+      "Order status requests timing out",
+      "Cache hit rate dropped"
+    ],
+    "metrics": {
+      "p95_latency_ms": 1750,
+      "error_rate_percent": 5.8,
+      "redis_connection_usage_percent": 98
+    },
+    "logs": [
+      "Redis connection pool exhausted",
+      "Redis timeout while retrieving order state",
+      "Connection acquisition failed"
+    ],
+    "root_cause": "Redis connection saturation caused by a sudden increase in concurrent requests",
+    "resolution": [
+      "Increased Redis connection pool",
+      "Scaled orders-api horizontally"
+    ],
+    "outcome": {
+      "recovery_time_minutes": 19,
+      "resolved": true
+    }
+  },
+  {
+    "incident_id": "INC-1065",
+    "timestamp": "2026-09-02T10:43:00Z",
+    "service": "inventory-service",
+    "severity": "SEV-1",
+    "symptoms": [
+      "Inventory updates failing",
+      "HTTP 500 responses increased after deployment"
+    ],
+    "metrics": {
+      "p95_latency_ms": 2900,
+      "error_rate_percent": 15.2,
+      "requests_per_minute": 4200
+    },
+    "logs": [
+      "Invalid INVENTORY_CACHE_TTL configuration",
+      "Cache initialization failed",
+      "Application startup completed with invalid configuration"
+    ],
+    "root_cause": "Incorrect configuration introduced during deployment",
+    "resolution": [
+      "Corrected cache configuration",
+      "Rolled back deployment"
+    ],
+    "outcome": {
+      "recovery_time_minutes": 16,
+      "resolved": true
+    }
+  },
+  {
+    "incident_id": "INC-1068",
+    "timestamp": "2026-09-05T18:27:00Z",
+    "service": "payments-api",
+    "severity": "SEV-2",
+    "symptoms": [
+      "Payment confirmation slow",
+      "Intermittent payment failures"
+    ],
+    "metrics": {
+      "p95_latency_ms": 3400,
+      "error_rate_percent": 10.1,
+      "requests_per_minute": 10200,
+      "db_connection_usage_percent": 97
+    },
+    "logs": [
+      "PostgreSQL connection pool exhausted",
+      "Database connection wait time exceeded threshold",
+      "Payment transaction waiting for connection"
+    ],
+    "root_cause": "Database connection pool exhaustion under sustained traffic",
+    "resolution": [
+      "Increased connection pool capacity",
+      "Added additional payments-api instances"
+    ],
+    "outcome": {
+      "recovery_time_minutes": 24,
+      "resolved": true
+    }
+  },
+  {
+    "incident_id": "INC-1071",
+    "timestamp": "2026-09-07T12:08:00Z",
+    "service": "orders-api",
+    "severity": "SEV-2",
+    "symptoms": [
+      "Order lookup latency increased",
+      "Some order requests failed"
+    ],
+    "metrics": {
+      "p95_latency_ms": 1600,
+      "error_rate_percent": 4.9,
+      "redis_connection_usage_percent": 95
+    },
+    "logs": [
+      "Redis connection acquisition timeout",
+      "Redis pool utilization above 95%",
+      "Order cache lookup failed"
+    ],
+    "root_cause": "Redis connection saturation",
+    "resolution": [
+      "Raised Redis connection limit",
+      "Restarted affected orders-api instances"
+    ],
+    "outcome": {
+      "recovery_time_minutes": 17,
+      "resolved": true
+    }
+  },
+  {
+    "incident_id": "INC-1072",
+    "timestamp": "2026-09-09T08:35:00Z",
+    "service": "payments-api",
+    "severity": "SEV-2",
+    "symptoms": [
+      "Payment authorization requests failing",
+      "Third-party API latency increased"
+    ],
+    "metrics": {
+      "p95_latency_ms": 4100,
+      "error_rate_percent": 11.4,
+      "requests_per_minute": 5100
+    },
+    "logs": [
+      "Payment gateway returned HTTP 502",
+      "Gateway request timeout",
+      "Retry queue increasing"
+    ],
+    "root_cause": "External payment gateway experiencing elevated errors",
+    "resolution": [
+      "Enabled payment gateway fallback",
+      "Reduced aggressive retries"
+    ],
+    "outcome": {
+      "recovery_time_minutes": 35,
+      "resolved": true
+    }
+  },
+  {
+    "incident_id": "INC-1075",
+    "timestamp": "2026-09-11T15:46:00Z",
+    "service": "inventory-service",
+    "severity": "SEV-2",
+    "symptoms": [
+      "Stock availability checks slow",
+      "Inventory requests intermittently failing"
+    ],
+    "metrics": {
+      "p95_latency_ms": 2300,
+      "error_rate_percent": 6.7,
+      "redis_connection_usage_percent": 97
+    },
+    "logs": [
+      "Redis pool reached maximum connections",
+      "Cache connection timeout",
+      "Inventory lookup failed"
+    ],
+    "root_cause": "Redis connection pool saturation",
+    "resolution": [
+      "Increased Redis connection pool",
+      "Reduced unnecessary cache connection creation"
+    ],
+    "outcome": {
+      "recovery_time_minutes": 20,
+      "resolved": true
+    }
+  },
+  {
+    "incident_id": "INC-1079",
+    "timestamp": "2026-09-14T09:12:00Z",
+    "service": "notification-service",
+    "severity": "SEV-1",
+    "symptoms": [
+      "Notifications failing after deployment",
+      "Notification worker restarting repeatedly"
+    ],
+    "metrics": {
+      "p95_latency_ms": 2800,
+      "error_rate_percent": 14.8,
+      "queue_depth": 9200
+    },
+    "logs": [
+      "Invalid notification provider URL",
+      "Worker startup validation failed",
+      "Container restarted repeatedly"
+    ],
+    "root_cause": "Incorrect environment configuration introduced by deployment",
+    "resolution": [
+      "Corrected provider URL",
+      "Rolled back faulty deployment"
+    ],
+    "outcome": {
+      "recovery_time_minutes": 13,
+      "resolved": true
+    }
+  },
+  {
+    "incident_id": "INC-1084",
+    "timestamp": "2026-09-17T20:21:00Z",
+    "service": "payments-api",
+    "severity": "SEV-2",
+    "symptoms": [
+      "Payment API latency increased",
+      "Payment requests intermittently timeout"
+    ],
+    "metrics": {
+      "p95_latency_ms": 3600,
+      "error_rate_percent": 11.8,
+      "requests_per_minute": 10800,
+      "db_connection_usage_percent": 99
+    },
+    "logs": [
+      "PostgreSQL connection acquisition timeout",
+      "Database pool exhausted",
+      "Too many concurrent database requests"
+    ],
+    "root_cause": "PostgreSQL connection pool exhaustion caused by high concurrent traffic",
+    "resolution": [
+      "Increased database connection pool",
+      "Added application replicas"
+    ],
+    "outcome": {
+      "recovery_time_minutes": 26,
+      "resolved": true
+    }
+  },
+  {
+    "incident_id": "INC-1088",
+    "timestamp": "2026-09-19T06:54:00Z",
+    "service": "orders-api",
+    "severity": "SEV-2",
+    "symptoms": [
+      "Order creation delayed",
+      "External tax calculation requests failing"
+    ],
+    "metrics": {
+      "p95_latency_ms": 3800,
+      "error_rate_percent": 9.3,
+      "requests_per_minute": 3900
+    },
+    "logs": [
+      "Tax provider returned HTTP 503",
+      "External request timeout",
+      "Order processing retry count increasing"
+    ],
+    "root_cause": "External tax calculation provider unavailable",
+    "resolution": [
+      "Enabled cached tax values for eligible orders",
+      "Retried failed requests after provider recovery"
+    ],
+    "outcome": {
+      "recovery_time_minutes": 29,
+      "resolved": true
+    }
+  },
+  {
+    "incident_id": "INC-1090",
+    "timestamp": "2026-09-21T17:38:00Z",
+    "service": "orders-api",
+    "severity": "SEV-2",
+    "symptoms": [
+      "Order history requests slow",
+      "Cache misses increased sharply"
+    ],
+    "metrics": {
+      "p95_latency_ms": 2050,
+      "error_rate_percent": 6.1,
+      "redis_connection_usage_percent": 99
+    },
+    "logs": [
+      "Redis maximum client connections reached",
+      "Connection acquisition timeout",
+      "Cache request failed"
+    ],
+    "root_cause": "Redis connection saturation during traffic increase",
+    "resolution": [
+      "Increased Redis connection limit",
+      "Scaled orders-api instances"
+    ],
+    "outcome": {
+      "recovery_time_minutes": 23,
+      "resolved": true
+    }
+  },
+  {
+    "incident_id": "INC-1091",
+    "timestamp": "2026-09-23T14:05:00Z",
+    "service": "payments-api",
+    "severity": "SEV-2",
+    "symptoms": [
+      "Payment processing latency increased",
+      "Transaction timeout rate increased"
+    ],
+    "metrics": {
+      "p95_latency_ms": 3300,
+      "error_rate_percent": 9.9,
+      "requests_per_minute": 9400,
+      "db_connection_usage_percent": 98
+    },
+    "logs": [
+      "PostgreSQL connection pool utilization 100%",
+      "Connection acquisition exceeded timeout",
+      "Payment transaction delayed"
+    ],
+    "root_cause": "Repeated PostgreSQL connection pool exhaustion during high traffic",
+    "resolution": [
+      "Raised connection pool limit",
+      "Adjusted application concurrency"
+    ],
+    "outcome": {
+      "recovery_time_minutes": 21,
+      "resolved": true
+    }
+  },
+  {
+    "incident_id": "INC-1095",
+    "timestamp": "2026-09-24T11:29:00Z",
+    "service": "orders-api",
+    "severity": "SEV-1",
+    "symptoms": [
+      "Order creation failed after release",
+      "HTTP 500 error rate increased"
+    ],
+    "metrics": {
+      "p95_latency_ms": 3000,
+      "error_rate_percent": 17.2,
+      "requests_per_minute": 5800
+    },
+    "logs": [
+      "Database migration version mismatch",
+      "Application expected schema version 42",
+      "Production database schema version 41"
+    ],
+    "root_cause": "Application deployment was incompatible with the production database schema",
+    "resolution": [
+      "Rolled back application deployment",
+      "Applied compatible database migration"
+    ],
+    "outcome": {
+      "recovery_time_minutes": 32,
+      "resolved": true
+    }
+  },
+  {
+    "incident_id": "INC-1101",
+    "timestamp": "2026-09-25T03:17:00Z",
+    "service": "inventory-service",
+    "severity": "SEV-2",
+    "symptoms": [
+      "Inventory service CPU usage increased",
+      "Requests became progressively slower"
+    ],
+    "metrics": {
+      "p95_latency_ms": 2600,
+      "error_rate_percent": 3.8,
+      "cpu_usage_percent": 96
+    },
+    "logs": [
+      "Long-running inventory reconciliation process",
+      "Worker CPU utilization above 95%",
+      "Request processing delayed"
+    ],
+    "root_cause": "Long-running background reconciliation process consumed excessive CPU",
+    "resolution": [
+      "Stopped runaway reconciliation job",
+      "Restarted affected worker"
+    ],
+    "outcome": {
+      "recovery_time_minutes": 15,
+      "resolved": true
+    }
+  },
+  {
+    "incident_id": "INC-1105",
+    "timestamp": "2026-09-26T05:41:00Z",
+    "service": "payments-api",
+    "severity": "SEV-2",
+    "symptoms": [
+      "Payment API requests intermittently failing",
+      "Network latency increased"
+    ],
+    "metrics": {
+      "p95_latency_ms": 2900,
+      "error_rate_percent": 5.9,
+      "requests_per_minute": 4500
+    },
+    "logs": [
+      "Upstream network timeout",
+      "Packet loss detected between application and gateway",
+      "Payment gateway connection reset"
+    ],
+    "root_cause": "Temporary network packet loss between payments-api and payment gateway",
+    "resolution": [
+      "Rerouted traffic through secondary network path",
+      "Network connectivity recovered"
+    ],
+    "outcome": {
+      "recovery_time_minutes": 28,
+      "resolved": true
+    }
+  },
+  {
+    "incident_id": "INC-1110",
+    "timestamp": "2026-09-27T22:14:00Z",
+    "service": "notification-service",
+    "severity": "SEV-2",
+    "symptoms": [
+      "Notification worker memory usage continuously increasing",
+      "Workers restarted due to memory pressure"
+    ],
+    "metrics": {
+      "p95_latency_ms": 2200,
+      "error_rate_percent": 4.4,
+      "memory_usage_percent": 94
+    },
+    "logs": [
+      "Worker memory usage exceeded 90%",
+      "Garbage collection unable to reclaim expected memory",
+      "Container terminated due to memory limit"
+    ],
+    "root_cause": "Memory leak in notification template processing",
+    "resolution": [
+      "Restarted affected workers",
+      "Disabled problematic template processing path",
+      "Scheduled permanent code fix"
+    ],
+    "outcome": {
+      "recovery_time_minutes": 37,
+      "resolved": true
+    }
+  }
+]

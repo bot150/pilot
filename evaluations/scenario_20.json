@@ -1,0 +1,46 @@
+{
+  "scenario_id": "SCENARIO-20",
+  "experience_level": 20,
+  "title": "Experienced Agent Recognizes Payment Failure Pattern",
+  "description": "After accumulating a large history of incidents, the agent encounters another payment API latency incident and should recognize a recurring pattern.",
+  "incident": {
+    "service": "payments-api",
+    "symptoms": [
+      "Payment requests are timing out",
+      "API latency is significantly elevated",
+      "Payment error rate has increased"
+    ],
+    "metrics": {
+      "p95_latency_ms": 3400,
+      "error_rate_percent": 9.1,
+      "requests_per_minute": 10100,
+      "db_connection_usage_percent": 99
+    }
+  },
+  "expected_behavior": {
+    "memory_context": "Large historical incident history available",
+    "relevant_incidents": [
+      "INC-1042",
+      "INC-1057",
+      "INC-1068",
+      "INC-1084",
+      "INC-1091"
+    ],
+    "response_style": "Specific, evidence-based and pattern-aware",
+    "expected_pattern": "Repeated PostgreSQL connection pool exhaustion associated with high payment traffic",
+    "evidence": [
+      "Current database connection utilization is 99%",
+      "Current traffic is above 10000 requests per minute",
+      "Multiple previous payment incidents showed the same combination",
+      "Previous incidents were resolved by increasing connection capacity and scaling application instances"
+    ],
+    "suggested_action": [
+      "Inspect PostgreSQL connection acquisition latency",
+      "Inspect connection pool saturation",
+      "Compare current pool configuration with previous incidents",
+      "Increase connection pool capacity if database capacity allows",
+      "Scale payments-api instances if concurrency remains high"
+    ]
+  },
+  "learning_goal": "Demonstrate that accumulated incident memory allows the agent to recognize a recurring operational pattern and produce a more specific recommendation."
+}

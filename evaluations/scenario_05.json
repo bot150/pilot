@@ -1,0 +1,36 @@
+{
+  "scenario_id": "SCENARIO-05",
+  "experience_level": 5,
+  "title": "Repeated Payment Latency Pattern",
+  "description": "The agent has experienced several previous incidents and encounters another payment API latency problem.",
+  "incident": {
+    "service": "payments-api",
+    "symptoms": [
+      "Payment requests are timing out",
+      "API latency is increasing during high traffic"
+    ],
+    "metrics": {
+      "p95_latency_ms": 3100,
+      "error_rate_percent": 9.7,
+      "requests_per_minute": 9700,
+      "db_connection_usage_percent": 99
+    }
+  },
+  "expected_behavior": {
+    "memory_context": "Several relevant historical incidents should be available",
+    "relevant_incidents": [
+      "INC-1042",
+      "INC-1057",
+      "INC-1068"
+    ],
+    "response_style": "Contextual troubleshooting based on previous incidents",
+    "expected_pattern": "PostgreSQL connection pool exhaustion during high traffic",
+    "suggested_action": [
+      "Inspect PostgreSQL connection pool utilization",
+      "Compare current connection usage with previous incidents",
+      "Check whether application concurrency has increased",
+      "Consider increasing connection pool capacity if confirmed"
+    ]
+  },
+  "learning_goal": "Demonstrate that the agent can use relevant historical incidents to make its investigation more contextual."
+}
